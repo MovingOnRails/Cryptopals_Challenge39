@@ -45,9 +45,9 @@ int main(){
     }
 
     // --------------------Encrypt the message--------------------
-    const char message[68] = "Get get get get\nGot got got got\nBlood rush to my\nHead lit hot lock\n";
-    const char message_hex[135];
-    for(int i=0;i<66;i++){
+    const char message[17] = "This is a test\n";
+    const char message_hex[33];
+    for(int i=0;i<16;i++){
         snprintf(message_hex+i*2, 3, "%02x", message[i]);
     }
     mpz_set_str(m, message_hex, 16);
