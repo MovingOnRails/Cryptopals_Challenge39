@@ -55,7 +55,7 @@ int main(){
 
     // --------------------Encrypt the message--------------------
     const char message[17] = "This is a test\n";
-    const char message_hex[33];
+    char message_hex[33];
     for(int i=0;i<16;i++){
         snprintf(message_hex+i*2, 3, "%02x", message[i]);
     }
@@ -75,5 +75,7 @@ int main(){
 
     buffer[count] = '\0';
     printf("message deciphered:\n%s", buffer);
+
+    mpz_clears(a, b, p, q, n, et_term1, et_term2, et, e ,d, c, m, m_deciphered,NULL);
     return 0;
 }
