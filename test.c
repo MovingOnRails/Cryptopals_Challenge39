@@ -3,6 +3,24 @@
 
 #include <gmp.h>
 
+void get_RSA_prime(mpz_t e, mpz_t p, gmp_randstate_t state, unsigned long bits){
+    mpz_t gcd_a, p1, a;
+    mpz_inits(gcd_a, p1, a, NULL);
+
+    mpz_set_ui(gcd_a, 0);
+    while(mpz_cmp_ui(gcd_a,1) != 0){
+        mpz_set_ui(a, 0);
+        while(mpz_cmp_ui(a, 0) == 0){
+            mpz_urandomb(a, state, bits);
+        }
+        mpz_nextprime(p, a);
+        mpz_sub_ui(p1, p, 1);
+        mpz_gcd(gcd_a,p1,e);
+    }
+
+    mpz_clears(gcd_a, p1, a, NULL);
+}
+
 int main(){
 
     mpz_t a, b, p, q, n, et_term1, et_term2, et, e, d, c, m, m_deciphered;
@@ -15,17 +33,10 @@ int main(){
 
     unsigned long bits = 1024;
 
-    mpz_set_ui(a, 0);
-    while(mpz_cmp_ui(a, 0) == 0){
-        mpz_urandomb(a, state, bits);
-    }
-    mpz_nextprime(p, a);
+    mpz_set_ui(e, 3);    
     
-    mpz_set_ui(b, 0);
-    while(mpz_cmp_ui(b, 0) == 0){
-        mpz_urandomb(b, state, bits);
-    }
-    mpz_nextprime(q, b);
+    get_RSA_prime(e, p, state, bits);
+    get_RSA_prime(e, q, state, bits);
 
     mpz_mul(n, p, q);
 
@@ -33,8 +44,6 @@ int main(){
     mpz_sub_ui(et_term2, q, 1);
 
     mpz_mul(et, et_term1, et_term2);
-
-    mpz_set_ui(e, 65537);
 
     int result = mpz_invert(d, e, et);
     if(result != 0){
